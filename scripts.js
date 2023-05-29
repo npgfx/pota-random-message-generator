@@ -1203,6 +1203,7 @@ function getRandomInt (min,max) {
 // Testing
 
 const form = document.getElementById("form");
+const submit = document.getElementById("submit");
 const characterSelect =  document.getElementById("character");
 const mainDiv = document.getElementById("main");
 
@@ -1227,7 +1228,7 @@ function generateOptions(arrayName) {
     }
 };
 
-  function generateCharacterInfo() {
+function generateCharacterInfo() {
 
     //Store the selectedCharacter value
     let selectedCharacter = eval(characterSelect.value);
@@ -1240,6 +1241,13 @@ function generateOptions(arrayName) {
     characterNameHTML.textContent = selectedCharacter.name;
     //Insert the characterNameHTML object into the mainDiv
     mainDiv.appendChild(characterNameHTML);
+
+    // Create a DIV element and...
+    let characterAbilityScoresHTML = document.createElement('div');
+    // Set the ID to characterAbilityScores
+    characterAbilityScoresHTML.setAttribute('id', 'characterAbilityScores');
+    // Insert the ccharacterAbilityScoresHTML object into the mainDiv
+    mainDiv.appendChild(characterAbilityScoresHTML);
     
     // Create a P element and...
     let characterDescription = document.createElement('p');
@@ -1251,44 +1259,108 @@ function generateOptions(arrayName) {
     mainDiv.appendChild(characterDescription);
 
     // Create a DIV element and...
-    let characterAbilitiesHTML = document.createElement('div');
-    // Set the ID to characterAbilities
-    characterAbilitiesHTML.setAttribute('id', 'characterAbilities');
-    // Insert the characterAbilitiesHTML object into the mainDiv
-    mainDiv.appendChild(characterAbilitiesHTML);
-    // Make sure there are no objects within the characterAbilitiesHTML object 
+    let characterRacialTraitsHTML = document.createElement('div');
+    // Set the ID to characterRacialTraitsHTML
+    characterRacialTraitsHTML.setAttribute('id', 'characterAbilities');
+    // Insert the characterRacialTraitsHTML object into the mainDiv
+    mainDiv.appendChild(characterRacialTraitsHTML);
+    // Make sure there are no objects within the characterAbilitiesHTML object
 
-    function generateObjectKeys(obj) {
+    function generateAbilityScores(obj) {
+        
+        for (const [key, value] of Object.entries(obj.abilityScoreTotal)) {
+            let div = document.createElement('div');
+            let heading3 = document.createElement('h3');
+            let heading6 = document.createElement('h6');
+            let para = document.createElement('p');
+            let abbr = key.substring(0, 3).toUpperCase();
+            let modifier;
+
+            if (value <= 1) {
+                modifier = -5;
+            } else if (value >=2 && value  <=3) {
+                modifier = -4;
+            } else if (value >=4 && value  <=5) {
+                modifier = -3;
+            } else if (value >=6 && value  <=7) {
+                modifier = -2;
+            } else if (value >=8 && value  <=9) {           
+                modifier = -1;
+            } else if (value >=10 && value  <=11) {     
+                modifier = 0;
+            } else if (value >=12 && value  <=13) { 
+                modifier = 1;
+            } else if (value >=14 && value  <=15) {
+                modifier = 2;
+            } else if (value >=16 && value  <=17) {
+                modifier = 3;
+            } else if (value >=18 && value  <=19) {
+                modifier = 4;
+            } else if (value >=20 && value  <=21) {
+                modifier = 5;
+            } else if (value >=22 && value  <=23) {
+                modifier = 6;
+            } else if (value >=24 && value  <=25) {
+                modifier = 7;
+            } else if (value >=26 && value  <=27) {
+                modifier = 8;
+            } else if (value >=28 && value  <=29) {
+                modifier = 9;
+            } else if (value === 30) {
+                modifier = 10;
+            }
+
+            characterAbilityScoresHTML.appendChild(div);
+            div.appendChild(heading3);
+            div.appendChild(heading6);
+            div.appendChild(para);
+
+            if (modifier >= 0) {
+                heading3.innerHTML = "+" + modifier;
+            } else {
+                heading3.innerHTML = modifier;
+            }
+            
+            heading6.innerHTML = value;
+            para.innerHTML = abbr;
+            
+            
+        }
+    }
+
+    generateAbilityScores(selectedCharacter);
+
+    function generateRacialTraits(obj) {
         for (const [key, value] of Object.entries(obj)) {
             let div = document.createElement('div');
             let heading3 = document.createElement('h3');
             let para = document.createElement('p');
             div.appendChild(heading3);
             div.appendChild(para);
-            characterAbilitiesHTML.appendChild(div);
+            characterRacialTraitsHTML.appendChild(div);
             heading3.innerHTML = value.name;
             para.innerHTML = value.description;
         }
       };
 
-    generateObjectKeys(selectedCharacter.race.racialTraits);
+    generateRacialTraits(selectedCharacter.race.racialTraits);
 
     if (selectedCharacter.subrace) {
         let heading2 = document.createElement('h2');
         heading2.innerHTML = selectedCharacter.subrace.name;
         let para = document.createElement('p');
         para.innerHTML = selectedCharacter.subrace.description;
-        characterAbilitiesHTML.appendChild(heading2);
-        characterAbilitiesHTML.appendChild(para);
-        generateObjectKeys(selectedCharacter.subrace.racialTraits);
+        characterRacialTraitsHTML.appendChild(heading2);
+        characterRacialTraitsHTML.appendChild(para);
+        generateRacialTraits(selectedCharacter.subrace.racialTraits);
     }
-
-
 };
 
 
 window.addEventListener("load", generateOptions(playerCharacters));
-form.addEventListener("change", removeAllChildNodes(mainDiv));
-form.addEventListener("change", generateCharacterInfo);
-
+submit.addEventListener("click", function(e) {
+    e.preventDefault();
+    removeAllChildNodes(mainDiv);
+    generateCharacterInfo();
+});
 

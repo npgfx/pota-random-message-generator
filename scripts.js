@@ -1330,6 +1330,23 @@ function generateCharacterInfo() {
 
     generateAbilityScores(selectedCharacter);
 
+    function generateCharacterKeys(obj) {
+        for (const [key, value] of Object.entries(obj)) {
+            let div = document.createElement('div');
+            let heading3 = document.createElement('h3');
+            let para = document.createElement('p');
+            
+            heading3.innerHTML = key;
+            para.innerHTML = value;
+
+            div.appendChild(heading3);
+            div.appendChild(para);
+            characterDescription.appendChild(div);
+        }
+    };
+
+    generateCharacterKeys(selectedCharacter);
+
     function generateRacialTraits(obj) {
         for (const [key, value] of Object.entries(obj)) {
             let div = document.createElement('div');

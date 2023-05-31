@@ -1220,7 +1220,6 @@ function generateOptions(arrayName) {
       // Create option element
       const option = document.createElement('option');
       option.value = object.id;
-      console.log(option.value);
       option.textContent = object.name;
   
       // Append option to select field
@@ -1261,10 +1260,10 @@ function generateCharacterInfo() {
     // Create a DIV element and...
     let characterRacialTraitsHTML = document.createElement('div');
     // Set the ID to characterRacialTraitsHTML
-    characterRacialTraitsHTML.setAttribute('id', 'characterAbilities');
+    characterRacialTraitsHTML.setAttribute('id', 'characterRacialTraits');
     // Insert the characterRacialTraitsHTML object into the mainDiv
     mainDiv.appendChild(characterRacialTraitsHTML);
-    // Make sure there are no objects within the characterAbilitiesHTML object
+    // Make sure there are no objects within the characterRacialTraitsHTML object
 
     function generateAbilityScores(obj) {
         
@@ -1332,45 +1331,69 @@ function generateCharacterInfo() {
 
     function generateCharacterKeys(obj) {
         for (const [key, value] of Object.entries(obj)) {
+
             let div = document.createElement('div');
             let heading3 = document.createElement('h3');
+            let heading4 = document.createElement('h4');
             let para = document.createElement('p');
-            
-            heading3.innerHTML = key;
-            para.innerHTML = value;
+            console.log(key);
+            if (key === 'id' || key === 'name') {
 
-            div.appendChild(heading3);
-            div.appendChild(para);
-            characterDescription.appendChild(div);
+            } else if (typeof value === 'object') {
+
+                if (key === 'race') {
+                    let div = document.createElement('div');
+                    let heading3 = document.createElement('h3');
+                    let para = document.createElement('p');
+                    div.setAttribute('id', key);
+                    div.appendChild(heading3);
+                    div.appendChild(para);
+                    characterRacialTraitsHTML.appendChild(div);
+                    heading3.innerHTML = value.name;
+                    para.innerHTML = value.description;
+                    characterDescription.appendChild(div);
+                    for (const [innerKey, innerValue] of Object.entries(obj.race.racialTraits)) {
+                        let div = document.createElement('div');
+                        let heading4 = document.createElement('h4');
+                        let para = document.createElement('p');
+                        div.setAttribute('id', innerKey);
+                        div.appendChild(heading4);
+                        div.appendChild(para);
+                        characterRacialTraitsHTML.appendChild(div);
+                        heading4.innerHTML = innerValue.name;
+                        para.innerHTML = innerValue.description;
+                        characterDescription.appendChild(div);
+                    }
+
+                } else if (key === 'subrace' && obj.subrace) {
+                    div.setAttribute('id', key);
+                    div.appendChild(heading3);
+                    div.appendChild(para);
+                    characterRacialTraitsHTML.appendChild(div);
+                    heading3.innerHTML = value.name;
+                    para.innerHTML = value.description;
+                    characterDescription.appendChild(div);
+                    for (const [innerKey, innerValue] of Object.entries(obj.subrace.racialTraits)) {
+                        let div = document.createElement('div');
+                        let heading4 = document.createElement('h4');
+                        let para = document.createElement('p');
+                        div.setAttribute('id', innerKey);
+                        div.appendChild(heading4);
+                        div.appendChild(para);
+                        characterRacialTraitsHTML.appendChild(div);
+                        heading4.innerHTML = innerValue.name;
+                        para.innerHTML = innerValue.description;
+                        characterDescription.appendChild(div);
+                    }
+                }
+                
+
+            } else {}
+            
         }
     };
 
     generateCharacterKeys(selectedCharacter);
-
-    function generateRacialTraits(obj) {
-        for (const [key, value] of Object.entries(obj)) {
-            let div = document.createElement('div');
-            let heading3 = document.createElement('h3');
-            let para = document.createElement('p');
-            div.appendChild(heading3);
-            div.appendChild(para);
-            characterRacialTraitsHTML.appendChild(div);
-            heading3.innerHTML = value.name;
-            para.innerHTML = value.description;
-        }
-      };
-
-    generateRacialTraits(selectedCharacter.race.racialTraits);
-
-    if (selectedCharacter.subrace) {
-        let heading2 = document.createElement('h2');
-        heading2.innerHTML = selectedCharacter.subrace.name;
-        let para = document.createElement('p');
-        para.innerHTML = selectedCharacter.subrace.description;
-        characterRacialTraitsHTML.appendChild(heading2);
-        characterRacialTraitsHTML.appendChild(para);
-        generateRacialTraits(selectedCharacter.subrace.racialTraits);
-    }
 };
 
 

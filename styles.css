@@ -71,11 +71,16 @@ select {
     color: wheat;
 }
 
+h2#characterName {
+    margin: 2rem 0;
+}
+
 #characterAbilityScores {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     text-align: center;
+    margin: 0 0 2rem 0;
 }
 
 @media screen and (min-width: 375px) {
@@ -93,7 +98,7 @@ select {
 }
 
 #characterAbilityScores div h3 {
-    font-size: 1.75rem;
+    font-size: 2rem;
     color: maroon;
     font-weight: bold;
     margin: .375rem 0 .75rem 0;
@@ -101,6 +106,7 @@ select {
 
 #characterAbilityScores div h6 {
     font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
     margin-bottom: .5rem;
 }
 

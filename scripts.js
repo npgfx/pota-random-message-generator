@@ -1234,7 +1234,9 @@ function generateCharacterInfo() {
 
     /* Store the selectedCharacter value */
 
-    let selectedCharacter = eval(characterSelect.value);
+    let selectedCharacter = playerCharacters[getRandomInt(0, playerCharacters.length-1)];
+    console.log(selectedCharacter);
+    //let selectedCharacter = eval(characterSelect.value);
     
     /* Create an H2 element, set the ID to characterName
        Set the characterName Object to have a text value
@@ -1439,13 +1441,13 @@ function generateCharacterInfo() {
                 para.innerHTML = value.description;
 
             }
+        } else {
+            console.log("Selected character or object has no defined subrace. If you believe this is in error, review the " + selectedCharacter.id + " object.");
         }
     }
     generateCharacterRacialTraits(selectedCharacter);
 };
 
-
-window.addEventListener("load", generateOptions(playerCharacters));
 submit.addEventListener("click", function(e) {
     e.preventDefault();
     removeAllChildNodes(mainDiv);

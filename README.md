@@ -1,1 +1,3 @@
 # Princes of the Apocalypse Random Message Generator
+
+In its current form, this is a random message generator for a portfolio project in the Codecademy curriculum. The final product should return a randomly generated message from 3 pieces of data. In order to challenge myself and take the project a step further, I chose to use my ongoing D&D campaign as my data source. The first completed piece of the project allows the user to push a button to roll 1d8 and randomly select one of eight player characters from the campaign. After selecting a character, the user will see their ability scores and modifiers and racial traits about that character.

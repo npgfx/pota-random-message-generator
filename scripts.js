@@ -190,6 +190,7 @@ const dwarf = {
                     wisdom: 1
                 },
                 dwarvenToughness: {
+                    name: "Dwarven Toughness",
                     description: "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
                     maxHitPoints: characterLevel    
                 }
@@ -1207,6 +1208,8 @@ const submit = document.getElementById("submit");
 const characterSelect =  document.getElementById("character");
 const mainDiv = document.getElementById("main");
 
+
+
 function generateOptions(arrayName) {
     const selectField = document.getElementById('character');
   
@@ -1229,23 +1232,25 @@ function generateOptions(arrayName) {
 
 function generateCharacterInfo() {
 
-    //Store the selectedCharacter value
+    /* Store the selectedCharacter value */
+
     let selectedCharacter = eval(characterSelect.value);
     
-    // Create an H1 element and...
-    let characterNameHTML = document.createElement('h1');
-    // set the ID to characterName
+    /* Create an H2 element, set the ID to characterName
+       Set the characterName Object to have a text value
+       of the selectedCharacter name property and insert 
+       the characterNameHTML object into the mainDiv */
+
+    let characterNameHTML = document.createElement('h2');
     characterNameHTML.setAttribute('id', 'characterName');
-    //Set the characterName object to have a text value of the selectedCharacter name property
     characterNameHTML.textContent = selectedCharacter.name;
-    //Insert the characterNameHTML object into the mainDiv
     mainDiv.appendChild(characterNameHTML);
 
-    // Create a DIV element and...
+    /* Create a DIV element and set the ID to characterAbilityScores
+       and insert the characterAbilityScoresHTML object into the mainDiv */
+    
     let characterAbilityScoresHTML = document.createElement('div');
-    // Set the ID to characterAbilityScores
     characterAbilityScoresHTML.setAttribute('id', 'characterAbilityScores');
-    // Insert the ccharacterAbilityScoresHTML object into the mainDiv
     mainDiv.appendChild(characterAbilityScoresHTML);
     
     // Create a P element and...
@@ -1310,9 +1315,10 @@ function generateCharacterInfo() {
             }
 
             characterAbilityScoresHTML.appendChild(div);
+            div.appendChild(para);
             div.appendChild(heading3);
             div.appendChild(heading6);
-            div.appendChild(para);
+
 
             if (modifier >= 0) {
                 heading3.innerHTML = "+" + modifier;
@@ -1326,74 +1332,116 @@ function generateCharacterInfo() {
             
         }
     }
-
     generateAbilityScores(selectedCharacter);
 
-    function generateCharacterKeys(obj) {
-        for (const [key, value] of Object.entries(obj)) {
+    function generateCharacterRacialTraits(obj) {
+        if (obj.race) {
 
-            let div = document.createElement('div');
-            let heading3 = document.createElement('h3');
+            /* Create the necessary HTML objects to display the relevant data */
+            let button = document.createElement('button');
+            let container = document.createElement('div');
+            let description = document.createElement('div');
             let heading4 = document.createElement('h4');
             let para = document.createElement('p');
-            console.log(key);
-            if (key === 'id' || key === 'name') {
 
-            } else if (typeof value === 'object') {
+            /* Set the necessary IDs and CLASSES for each created object */
+            button.setAttribute('class', 'accordion');
+            container.setAttribute('id', 'race');
+            container.setAttribute('class', 'accordion-panel');
+            description.setAttribute('id', 'race-description');
+            description.setAttribute('class', 'accordion-subpanel');
 
-                if (key === 'race') {
-                    let div = document.createElement('div');
-                    let heading3 = document.createElement('h3');
-                    let para = document.createElement('p');
-                    div.setAttribute('id', key);
-                    div.appendChild(heading3);
-                    div.appendChild(para);
-                    characterRacialTraitsHTML.appendChild(div);
-                    heading3.innerHTML = value.name;
-                    para.innerHTML = value.description;
-                    characterDescription.appendChild(div);
-                    for (const [innerKey, innerValue] of Object.entries(obj.race.racialTraits)) {
-                        let div = document.createElement('div');
-                        let heading4 = document.createElement('h4');
-                        let para = document.createElement('p');
-                        div.setAttribute('id', innerKey);
-                        div.appendChild(heading4);
-                        div.appendChild(para);
-                        characterRacialTraitsHTML.appendChild(div);
-                        heading4.innerHTML = innerValue.name;
-                        para.innerHTML = innerValue.description;
-                        characterDescription.appendChild(div);
-                    }
+            /* Insert the newly created objects into the appropriate parents */
+            container.appendChild(description);
+            description.appendChild(heading4);
+            description.appendChild(para);
+            characterRacialTraitsHTML.appendChild(button);
+            characterRacialTraitsHTML.appendChild(container);
 
-                } else if (key === 'subrace' && obj.subrace) {
-                    div.setAttribute('id', key);
-                    div.appendChild(heading3);
-                    div.appendChild(para);
-                    characterRacialTraitsHTML.appendChild(div);
-                    heading3.innerHTML = value.name;
-                    para.innerHTML = value.description;
-                    characterDescription.appendChild(div);
-                    for (const [innerKey, innerValue] of Object.entries(obj.subrace.racialTraits)) {
-                        let div = document.createElement('div');
-                        let heading4 = document.createElement('h4');
-                        let para = document.createElement('p');
-                        div.setAttribute('id', innerKey);
-                        div.appendChild(heading4);
-                        div.appendChild(para);
-                        characterRacialTraitsHTML.appendChild(div);
-                        heading4.innerHTML = innerValue.name;
-                        para.innerHTML = innerValue.description;
-                        characterDescription.appendChild(div);
-                    }
-                }
+            /* Set the content of the objects */
+            button.innerHTML = obj.race.name;
+            heading4.innerHTML = obj.race.name;
+            para.innerHTML = obj.race.description;            
+
+            /* For each key, value pairing in the racialTraits property of the race 
+            object create the necessary HTML objects to display the name and description
+            of each racial trait. */
+
+            for (const [key, value] of Object.entries(obj.race.racialTraits)) {
+
+                let parentDiv = document.getElementById('race');
+                let div = document.createElement('div');
+                let heading4 = document.createElement('h4');
+                let para = document.createElement('p');
                 
+                div.setAttribute('id', key);
+                div.setAttribute('class', 'accordion-subpanel');
+                div.appendChild(heading4);
+                div.appendChild(para);
+                
+                parentDiv.appendChild(div);
+                heading4.innerHTML = value.name;
+                para.innerHTML = value.description;
 
-            } else {}
-            
+            }
+
+        } else {
+            alert('The provided character or object does not have a defined race.');
         }
-    };
 
-    generateCharacterKeys(selectedCharacter);
+        if (obj.subrace) {
+            /* Create the necessary HTML objects to display the relevant data */
+            let button = document.createElement('button');
+            let raceDiv = document.getElementById('race');
+            let container = document.createElement('div');
+            let description = document.createElement('div');
+            let heading4 = document.createElement('h4');
+            let para = document.createElement('p');
+
+            /* Set the necessary IDs and CLASSES for each created object */
+            container.setAttribute('id', 'subrace');
+            container.setAttribute('class', 'accordion-panel');
+            description.setAttribute('id', 'subrace-description');
+            description.setAttribute('class', 'accordion-subpanel');
+            button.setAttribute('class', 'accordion');
+
+            /* Insert the newly created objects into the appropriate parents */
+            
+            container.appendChild(description);
+            description.appendChild(heading4);
+            description.appendChild(para);
+            raceDiv.appendChild(button);
+            raceDiv.appendChild(container);
+
+            /* Set the content of the objects */
+            button.innerHTML = obj.subrace.name;
+            heading4.innerHTML = obj.subrace.name;
+            para.innerHTML = obj.subrace.description;            
+
+            /* For each key, value pairing in the racialTraits property of the race 
+            object create the necessary HTML objects to display the name and description
+            of each racial trait. */
+
+            for (const [key, value] of Object.entries(obj.subrace.racialTraits)) {
+
+                let parentDiv = document.getElementById('subrace');
+                let div = document.createElement('div');
+                let heading4 = document.createElement('h4');
+                let para = document.createElement('p');
+                
+                div.setAttribute('id', key);
+                div.setAttribute('class', 'accordion-subpanel')
+                div.appendChild(heading4);
+                div.appendChild(para);
+                
+                parentDiv.appendChild(div);
+                heading4.innerHTML = value.name;
+                para.innerHTML = value.description;
+
+            }
+        }
+    }
+    generateCharacterRacialTraits(selectedCharacter);
 };
 
 
@@ -1402,5 +1450,20 @@ submit.addEventListener("click", function(e) {
     e.preventDefault();
     removeAllChildNodes(mainDiv);
     generateCharacterInfo();
+
+    let accordion = document.getElementsByClassName("accordion");
+
+    for (let i=0; i < accordion.length; i++) {
+        accordion[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            let panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
 });
+
 

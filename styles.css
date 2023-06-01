@@ -13,7 +13,7 @@ h1 {
 }
 
 h2 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bold;
     margin: .5rem 0;
@@ -27,8 +27,9 @@ h3 {
 }
 
 h4 {
-    font-size: 1.75rem;
-    margin: .25rem 0;
+    font-size: 1.5rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: .5rem 0;
 }
 
 
@@ -72,19 +73,81 @@ select {
 
 #characterAbilityScores {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     text-align: center;
 }
 
+@media screen and (min-width: 375px) {
+    #characterAbilityScores {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: auto;
+    }
+}
+
 #characterAbilityScores div {
-    border: 1px solid tan;
+    border: 1px double tan;
+    border-radius: 12px;
+    background-color: white;
+    padding: .25rem;
 }
 
 #characterAbilityScores div h3 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    color: maroon;
+    font-weight: bold;
+    margin: .375rem 0 .75rem 0;
 }
 
 #characterAbilityScores div h6 {
     font-size: 1rem;
+    margin-bottom: .5rem;
+}
+
+#characterAbilityScores div p {
+    font-size: .875rem;
+    border-bottom: 1px solid tan;
+    margin: 0;
+}
+
+button.accordion {
+    background: maroon;
+    border: 1px outset maroon;
+    width: 100%;
+    padding: 1rem;
+    cursor: pointer;
+    transition: 0.4s;
+    color: wheat;
+    text-align: left;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+button.accordion::after {
+    content: "+";
+    float: right;
+}
+
+button.accordion.active::after {
+    content: "-";
+}
+
+div.accordion-panel h4 {
+    margin: 0 0 .5rem 0;
+    color: maroon;
+}
+div.accordion-panel {
+    display: none;
+    background-color: white;
+    border: 1px solid tan;
+}
+
+div.accordion-subpanel {
+    padding: .75rem 1rem;
+    border-top: 1px solid tan;
+}
+
+div.accordion-subpanel p {
+    margin: 0;
 }
